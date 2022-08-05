@@ -2,9 +2,8 @@ package hello.hellospring.service;
 
 import hello.hellospring.domain.Member;
 import hello.hellospring.repository.MemberRepository;
-import hello.hellospring.repository.MemoryMemberRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,14 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Transactional
 class MemberServiceIntegrationTest {
 
-    MemberRepository memrepo;
-    MemberService memser;
-
-    @BeforeEach
-    public void beforeEach() {
-        memrepo = new MemoryMemberRepository();
-        memser = new MemberService(memrepo);
-    }
+    @Autowired MemberRepository memrepo;
+    @Autowired MemberService memser;
 
     @Test
     void join() {
@@ -35,7 +28,7 @@ class MemberServiceIntegrationTest {
 
         //then
         Member foundMem = memser.findOne(joinedId).get();
-        assertThat(foundMem).isEqualTo(mem1);
+        assertThat(foundMem.getName()).isEqualTo(mem1.getName());
     }
 
     @Test
